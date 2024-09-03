@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #159957, #155799);
+            display: flex;
+        }
+        /* Horizontal Navbar */
+        .top-navbar {
+            width: 100%;
+            background: linear-gradient(to right, #333, #555);
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-navbar .username {
+            color: white;
+            font-size: 24px;
+        }
+        .top-navbar .logout {
+            background-color: #f6f333;
+            color: black;
+            border-radius: 4px;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        .top-navbar .logout:hover {
+            background-color: #e53935;
+            color: white;
+        }
+        /* Vertical Navbar */
+        .side-navbar {
+            width: 200px;
+            background: #444;
+            padding-top: 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .side-navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: left;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        .side-navbar a:hover {
+            background: #ddd;
+            color: #333;
+        }
+        /* Content Area */
+        .content-container {
+            margin-left: 220px; /* Adjust according to the width of the vertical navbar */
+            padding: 15px;
+            width: calc(100% - 220px); /* Adjust according to the width of the vertical navbar */
+        }
+        .content {
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: white;
+            margin: 60px;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px 15px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background: #333;
+            color: white;
+            font-size: 16px;
+        }
+        td {
+            background: #f9f9f9;
+        }
+        tr:nth-child(even) td {
+            background: #e9e9e9;
+        }
+        tr:hover td {
+            background: #d3d3d3;
+            transition: background 0.3s;
+        }
+        button {
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .accept-button {
+            background-color: #4CAF50;
+        }
+        .reject-button {
+            background-color: #f44336;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-inline input[type="text"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            flex-grow: 1;
+            font-size: 14px;
+        }
+        .btn-green {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .btn-green:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <!-- Horizontal Navbar -->
+    <div class="top-navbar">
+        <h2 class="username">Welcome, <span id="username"></span>, You are Admin!</h2>
+        <a href="/uam" class="logout">Logout</a>
+    </div>
+
+    <!-- Vertical Navbar -->
+    <div class="side-navbar">
+        <a href="#show-requests" onclick="accessContent('requests-content', loadRequests)">Show Requests</a>
+        <a href="#remove-resource-db" onclick="accessContent('remove-resource-db-content', loadResources)">Remove Resource from DB</a>
+        <a href="#add-resource-db" onclick="accessContent('add-resource-db-content', loadAddResourceForm)">Add Resource to DB</a>
+        <a href="#remove-resource-user" onclick="accessContent('remove-resource-user-content', loadRemoveResourceUser)">Remove Resource from User</a>
+        <a href="#check-users-resource" onclick="accessContent('check-users-resource-content')">Check Resources of a User</a>
+        <a href="#check-resources-user" onclick="accessContent('check-resources-user-content')">Check Users of a Resource</a>
+        <a href="#view-users" onclick="accessContent('view-users-content', loadUsers)">View Users</a>
+        <a href="/uam/addUser.jsp">Add User</a>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-container">
+        <div class="content hidden" id="requests-content">
+            <h2>Show Requests</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Request Type</th>
+                        <th>Request Value</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="requests-table-body">
+                    <!-- Requests will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content hidden" id="remove-resource-db-content">
+            <h2>Remove Resource from DB</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="remove-resource-db-table-body">
+                    <!-- Resources will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content hidden" id="add-resource-db-content">
+            <h2>Add Resource to DB</h2>
+            <form id="add-resource-form" onsubmit="addResource(event)">
+                <label for="resource-name">Resource Name:</label>
+                <input type="text" id="resource-name" name="resourceName" required>
+                <button type="submit" class="btn-green">Add Resource</button>
+            </form>
+            <div id="add-resource-response"></div>
+        </div>
+
+        <div class="content hidden" id="remove-resource-user-content">
+            <h2>Remove Resource from User</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Resource</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="remove-resource-user-table-body">
+                    <!-- Data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content hidden" id="check-users-resource-content">
+            <h2>Check Resources of a User</h2>
+            <form action="/uam/webapi/myresource/checkresources" method="POST">
+                <label for="username">Enter Username:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit" class="btn-green">Submit</button>
+            </form>
+            <div id="user-resources-content">
+                <!-- User resources will be loaded here -->
+            </div>
+        </div>
+
+        <div class="content hidden" id="check-resources-user-content">
+            <h2>Check Users of a Resource</h2>
+            <form action="/uam/webapi/myresource/checkusers" method="POST">
+                <label for="resourceName">Enter Resource Name:</label>
+                <input type="text" id="resourceName" name="resourceName" required>
+                <button type="submit" class="btn-green">Submit</button>
+            </form>
+            <div id="resource-users-content">
+                <!-- Resource users will be loaded here -->
+            </div>
+        </div>
+
+        <div class="content hidden" id="view-users-content">
+            <h2>View Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="view-users-table-body">
+                    <!-- User data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function accessContent(contentId, callback) {
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(contentId).classList.remove('hidden');
+            if (callback) callback();
+        }
+
+        function loadRequests() {
+            // Load requests from the server (you'll need to implement this)
+        }
+
+        function loadResources() {
+            // Load resources from the server (you'll need to implement this)
+        }
+
+        function loadAddResourceForm() {
+            // Load any necessary data for adding resources (you'll need to implement this)
+        }
+
+        function loadRemoveResourceUser() {
+            // Load data for removing resources from users (you'll need to implement this)
+        }
+
+        function loadUsers() {
+            // Load user data from the server (you'll need to implement this)
+        }
+
+        function addResource(event) {
+            event.preventDefault();
+            const resourceName = document.getElementById('resource-name').value;
+            // Send resource name to the server and handle the response (you'll need to implement this)
+            console.log('Resource Added:', resourceName);
+        }
+    </script>
+</body>
+</html>

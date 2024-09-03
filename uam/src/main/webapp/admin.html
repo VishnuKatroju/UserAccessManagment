@@ -1,0 +1,1308 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+        
+            font-family: 'times new roman', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            
+        }
+        .navbar {
+            background: linear-gradient(to right, #333, #555);
+            overflow: hidden;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: #ddd;
+            color: #333;
+        }
+        .navbar .logout {
+            float: right;
+            background-color: #f6f333; /* Red background */
+            color: black;
+            border-radius: 4px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar .logout:hover {
+            background-color: #e53935; /* Darker red on hover */
+            color: white;
+        }
+        .navbar .change {
+            float: right;
+            background: linear-gradient(45deg, #17a2b8, #138496);
+             /* Red background */
+            color: black;
+            border-radius: 4px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar .change:hover {
+             background: linear-gradient(45deg, #ffc107, #e0a800);/* Darker red on hover */
+            color: white;
+        }
+         .content {
+		    padding: 15px;
+		    border-radius: 8px;
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		    background: linear-gradient(135deg, rgba(245, 245, 245, 0.9), rgba(224, 224, 224, 0.9));
+
+		    font-size: 14px;
+		    color: #333;
+		    width: calc(100% - 220px); /* Subtract sidebar width + some extra space for margin */
+		    margin: 50px 0 0 200px; /* Margin-top for space from top, margin-left to position next to sidebar */
+		    position: fixed; /* Position it fixed to the viewport */
+		}
+
+
+
+#add-user form,#add-user h2 {
+          /* Aligns children vertically */
+    justify-content: center;         /* Centers content vertically */
+    align-items: center;
+    display: flex;                   /* Enables Flexbox for the form */
+    flex-direction: column;          /* Aligns children vertically */
+                          /* Adds spacing between form elements */
+}
+  #view-users-table-container input[type="text"]
+         {
+        	width: 75%;
+            
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+       .content  input[type="text"],
+        .content  input[type="email"],
+        .content 	 input[type="password"] {
+        	width: 45%;
+            
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+      .side-navbar {
+    width: 200px;
+    background: #444;
+    padding-top: 20px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    height: calc(100vh - 62px); /* Adjust height to consider the offset */
+    position: fixed;
+    top: 62px;
+    left: 0;
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Hide horizontal scrolling */
+}
+
+        
+        .btn-form
+        {
+        background: linear-gradient(135deg, #00f2fe, #4facfe);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .side-navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: left;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        .side-navbar a:hover {
+            background: linear-gradient(135deg, #0072ff, #00c6ff); /* Azure blue blending into a lighter blue */
+
+            color: #333;
+        }
+        table {
+        	
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table, th, td {
+            border: none;
+        }
+        th, td {
+            padding: 10px 15px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background: #333;
+            color: white;
+            font-size: 16px;
+        }
+        td {
+            background: #f9f9f9;
+        }
+        tr:nth-child(even) td {
+            background: #e9e9e9;
+        }
+        tr:hover td {
+            background: #d3d3d3;
+            transition: background 0.3s;
+        }
+        button {
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.2s;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .accept-button {
+            background-color: #20c997; /* Green background */
+        }
+        .reject-button {
+        background: linear-gradient(45deg, #ff6f61, #ff3d40);
+            
+
+        }
+        .reject-button:hover {
+		background: linear-gradient(50deg,  #d0f4f7,#ff6e7f);
+		}
+		
+		/* Request Type Colors */
+		.resource-request {
+			
+		   background: linear-gradient(135deg, #B0E0E6, #191970);
+
+		}
+		
+		.role-request {
+		    background-color: #c3e6cb; /* Light Green */
+		}
+		
+		/* Request Status Colors */
+		.status-accepted {
+		    color: green;
+		    font-weight: bold;
+		}
+		
+		.status-rejected {
+		    color: red;
+		    font-weight: bold;
+		}
+		
+		.status-pending {
+		    color: orange;
+		    font-weight: bold;
+		}
+		
+
+        
+        .hidden {
+            display: none;
+        }
+        .form-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-inline input[type="text"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            flex-grow: 1;
+            font-size: 14px;
+        }
+        .username {
+		    margin-top: 10px; /* Space below the navbar */
+		    margin-left: 20px; /* Space from the left */
+		    color: white;
+		    font-size: 24px;
+		    position: absolute; /* Positioning it absolutely */
+		    top: 10px;
+		    left: 20px;
+		}
+		.username span{
+		color: Yellow;
+		}
+        .btn-green {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .btn-green:hover {
+            background-color: darkgreen;
+        }
+        
+        
+        #view-users-table-container {
+    max-height: 400px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    border: 1px solid #ddd; /* Optional: Adds a border around the table container */
+    margin-top: 10px; /* Optional: Adds some margin above the container */
+    padding: 5px; /* Optional: Adds padding inside the container */
+}
+
+#view-users-table {
+    width: 100%; /* Ensures the table fills the width of the container */
+    border-collapse: collapse; /* Makes sure that table borders are collapsed */
+}
+
+#view-users-table th, #view-users-table td {
+    padding: 8px; /* Adds padding inside table cells */
+    text-align: left; /* Aligns text to the left */
+    border-bottom: 1px solid #ddd; /* Adds a border below each table row */
+}
+      
+      #view-approvals-table-container {
+    max-height: 400px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    border: 1px solid #ddd; /* Optional: Adds a border around the table container */
+    margin-top: 10px; /* Optional: Adds some margin above the container */
+    padding: 5px; /* Optional: Adds padding inside the container */
+}
+
+#view-approvals-table {
+    width: 100%; /* Ensures the table fills the width of the container */
+    border-collapse: collapse; /* Makes sure that table borders are collapsed */
+}
+
+#view-approvals-table th, #view-approvals-table td {
+    padding: 8px; /* Adds padding inside table cells */
+    text-align: left; /* Aligns text to the left */
+    border-bottom: 1px solid #ddd; /* Adds a border below each table row */
+}
+      
+      #requests-table-container {
+    max-height: 400px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    border: 1px solid #ddd; /* Optional: Adds a border around the table container */
+    margin-top: 10px; /* Optional: Adds some margin above the container */
+    padding: 5px; /* Optional: Adds padding inside the container */
+}
+
+#requests-table {
+    width: 100%; /* Ensures the table fills the width of the container */
+    border-collapse: collapse; /* Makes sure that table borders are collapsed */
+}
+
+#requests-table th, #requests-table td {
+    padding: 8px; /* Adds padding inside table cells */
+    text-align: left; /* Aligns text to the left */
+    border-bottom: 1px solid #ddd; /* Adds a border below each table row */
+}
+        
+    </style>
+</head>
+<body>
+    <div class="side-navbar">
+        <a href="#show-requests" onclick="accessContent('requests-content', loadRequests)">Show Requests</a>
+        <a href="#add-resource-db" onclick="accessContent('add-resource-db-content', loadAddResourceForm)">Add Resource </a>
+        <a href="#remove-resource-db" onclick="accessContent('remove-resource-db-content', loadResources)">Remove Resource </a>		
+        <a href="#remove-resource-user" onclick="accessContent('remove-resource-user-content', loadRemoveResourceUser)">Remove Resource from User</a>
+        <a href="#check-users-resource" onclick="accessContent('user-resources',loadUsersOfResource)">Check Resources of a User</a>
+        <a href="#check-resources-user" onclick="accessContent('resource-users',loadResourcesOfUser)">Check Users of a Resource</a>
+        <a href="#view-users" onclick="accessContent('view-users-section', loadUsers)">View Users</a>
+        <a href="#check-approvals" onclick="accessContent('check-approvals', checkApprovals)">check approvals</a>
+        <a href="#add-new-user"  onclick="accessContent('add-user')">Add new User</a>
+        <a href="#remove-user" onclick="accessContent('remove-user', loadUsersDropdown)">Remove User</a>
+    </div>
+    <div class="navbar">
+	<!-- Welcome Message -->
+    <h2 class="username">Welcome, <span id="username"></span>,You are Admin!</h2>
+        <a  class="logout" onclick="logoutfunction()">Logout</a> <!-- Logout button -->
+    	<a href="#change-password" class="change" onclick="accessContent('password-change')">Change password</a>
+	
+    </div>
+    
+    
+    
+    
+    <div class="content hidden" id="view-users-section">
+    <h2>Edit Users</h2>
+    <!-- Add a container for the table -->
+    <div id="view-users-table-container" style="max-height: 400px; overflow-y: auto;">
+        <table id="view-users-table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Manager ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="view-users-table-body">
+                <!-- User rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <div class="content hidden" id="requests-content">
+    <h2>Show Requests</h2>
+    <!-- Add a container for the table -->
+    <div id="requests-table-container" style="max-height: 400px; overflow-y: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Request Type</th>
+                    <th>Request Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="requests-table-body">
+                <!-- Requests will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+	
+    <div class="content hidden" id="remove-resource-db-content">
+        <h2>Remove Resource from DB</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="remove-resource-db-table-body">
+                <!-- Resources will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+    
+    
+    
+<div class="content hidden" id="add-resource-db-content">
+    <h2>Add Resource to DB</h2>
+    <form action="/uam/webapi/myresource/addresource" method="POST">
+        <label for="resourceName">Enter Resource Name:</label>
+        <input type="text" id="resourceName" name="resourceName" required>
+        <button type="submit" class="btn-form">Submit</button>
+    </form>
+    <div id="add-resource-response">
+        <!-- Server response will be shown here -->
+    </div>
+</div>
+    
+
+    <div class="content hidden" id="remove-resource-user-content">
+        <h2>Remove Resource from User</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Resource</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="remove-resource-user-table-body">
+                <!-- Data will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content hidden" id="user-resources">
+    <h2>Check Resources of a User</h2>
+    <form action="/uam/webapi/myresource/checkresources" method="POST">
+        <label for="resource">Select User:</label>
+        <select id="userrr" name="userrr" required>
+            <!-- Options will be dynamically populated here -->
+        </select>
+        <button type="submit" class="btn-form">Submit</button>
+    </form>
+    <div id="user-resources-content">
+        <!-- User resources will be loaded here -->
+    </div>
+</div>
+    
+    
+<div class="content hidden" id="resource-users">
+    <h2>Check Users of a Resource</h2>
+    <form action="/uam/webapi/myresource/checkusers" method="POST">
+        <label for="resource">Select Resource:</label>
+        <select id="resource" name="resource" required>
+            <!-- Options will be dynamically populated here -->
+        </select>
+        <button type="submit" class="btn-form">Submit</button>
+    </form>
+    <div id="user-user-content">
+        <!-- User resources will be loaded here -->
+    </div>
+</div> 
+    
+    
+    <div class="content hidden" id="remove-user">
+    <h2>Remove User</h2>
+    <form action="/uam/webapi/myresource/removeuser" method="POST">
+        <label for="users">Select Resource:</label>
+        <select id="userId" name="user" required>
+            <!-- Options will be dynamically populated here -->
+        </select>
+        <button type="submit" class="btn-form">Submit</button>
+    </form>
+    <div id="all-user-content">
+        <!-- User resources will be loaded here -->
+    </div>
+</div> 
+    
+   <div class="content hidden" id="check-approvals">
+    <h2>View Approvals</h2>
+    <!-- Add a container for the table -->
+    <div id="view-approvals-table-container" style="max-height: 400px; overflow-y: auto;">
+        <table id="view-approvals-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Request Type</th>
+                    <th>Request Value</th>
+                    <th>Request Status</th>
+                </tr>
+            </thead>
+            <tbody id="view-approvals-table-body">
+                <!-- Approval rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+    
+    
+    
+<div class="content hidden" id="password-change">
+    <h2>Change Password</h2>
+    <form id="passwordChangeForm">
+        <label for="oldpassword"></label>
+        <input type="password" id="oldpassword" name="oldpassword" placeholder="Old Password" required>
+        <br>
+        <label for="newpassword"></label>
+        <input type="password" id="newpassword" name="newpassword" placeholder="New Password" required
+               pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+               title="Password must be at least 8 characters long, include at least one letter, one number, and one special character">
+        <br>
+        <button type="submit" class="btn-green">Submit</button>
+    </form>
+    <div id="add-resource-response">
+        <!-- Server response will be shown here -->
+    </div>
+</div>
+
+    
+   
+<div class="content hidden" id="add-user">
+    <h2>Adding New User</h2>
+    <form id="add-user-form" action="webapi/myresource/addUser" method="post">
+        <label for="firstname"></label>
+        <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+        <br>
+        <label for="lastname"></label>
+        <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+        <br>
+        <label for="email"></label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <br>
+        <button type="submit" class="btn-green">Add User</button>
+    </form>
+    <div id="add-user-response">
+        <!-- Server response will be shown here -->
+    </div>
+</div>
+
+
+    <script>
+    	
+        function accessContent(contentId, loadFunction = null) {
+        	
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+            	
+                if (content.id === contentId) {
+                    content.classList.remove('hidden');
+                    if (loadFunction) {
+                        loadFunction();
+                    }
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+        	
+            displayUsername();
+            checkApprovals()
+            });
+        function displayUsername() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            const fullname = urlParams.get('fullname');
+            if (username) {
+                document.getElementById('username').textContent = fullname;
+                // Optionally set managerID in sessionStorage here if not set elsewhere
+                sessionStorage.setItem('userID', username); // Assuming username is being used as managerID
+            } else {
+                document.getElementById('username').textContent = 'User'; // Default text
+            }
+        }
+        document.getElementById('passwordChangeForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = event.target;
+            const formData = new URLSearchParams(new FormData(form)); // Use URLSearchParams to format form data
+
+            try {
+                const response = await fetch('/uam/webapi/myresource/changepassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded' // Set the correct content type
+                    },
+                    body: formData
+                });
+
+                const resultText = await response.text(); // Get response text
+
+                if (response.ok) {
+                    alert(resultText); // Show success message
+                } else {
+                    alert(`Error: ${resultText}`); // Show error message
+                }
+
+                // Optionally, clear the form after submission
+                form.reset();
+
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('An error occurred while changing the password. Please try again later.');
+            }
+        });
+
+        
+
+        
+        
+        
+        async function loadRequests() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/showrequests');
+                const requests = await response.json();
+                console.log('Requests:', requests);
+
+                const tableBody = document.getElementById('requests-table-body');
+                tableBody.innerHTML = ''; // Clear existing content
+
+                requests.forEach(request => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${request.username}</td>
+                        <td>${request.requestType}</td>
+                        <td>${request.requestValue}</td>
+                        <td>
+                            <form class="accept-request-form" style="display:inline;">
+                                <input type="hidden" name="username" value="${request.username}">
+                                <input type="hidden" name="requestType" value="${request.requestType}">
+                                <input type="hidden" name="requestValue" value="${request.requestValue}">
+                                <button type="submit" class="accept-button">Accept</button>
+                            </form>
+                            <form class="reject-request-form" style="display:inline;">
+                                <input type="hidden" name="username" value="${request.username}">
+                                <input type="hidden" name="requestType" value="${request.requestType}">
+                                <input type="hidden" name="requestValue" value="${request.requestValue}">
+                                <button type="submit" class="reject-button">Reject</button>
+                            </form>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Add event listeners to handle form submission via JavaScript
+                document.querySelectorAll('.accept-request-form').forEach(form => {
+                    form.addEventListener('submit', async function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formData = new FormData(this);
+                        const params = new URLSearchParams(formData).toString();
+
+                        try {
+                            const acceptResponse = await fetch('/uam/webapi/myresource/request/accept', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: params
+                            });
+
+                            const message = await acceptResponse.text();
+                            alert(message); // Show server response
+                            loadRequests(); // Reload requests after accepting
+                        } catch (error) {
+                            console.error('Error accepting request:', error);
+                            alert('An error occurred while accepting the request.');
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.reject-request-form').forEach(form => {
+                    form.addEventListener('submit', async function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formData = new FormData(this);
+                        const params = new URLSearchParams(formData).toString();
+
+                        try {
+                            const rejectResponse = await fetch('/uam/webapi/myresource/request/reject', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: params
+                            });
+
+                            const message = await rejectResponse.text();
+                            alert(message); // Show server response
+                            loadRequests(); // Reload requests after rejecting
+                        } catch (error) {
+                            console.error('Error rejecting request:', error);
+                            alert('An error occurred while rejecting the request.');
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+ 
+        
+        
+        async function checkApprovals() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/checkapprovals');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const approvals = await response.json();
+                const tableBody = document.getElementById('view-approvals-table-body');
+                tableBody.innerHTML = ''; // Clear previous content
+
+                if (approvals.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="4">No approvals found.</td></tr>';
+                } else {
+                    approvals.forEach(approval => {
+                        const row = document.createElement('tr');
+
+                        // Determine CSS class for Request Type
+                        let requestTypeClass = '';
+                        if (approval.request_type === 'Resource Request') {
+                            requestTypeClass = 'resource-request';
+                        } else if (approval.request_type === 'Role Request') {
+                            requestTypeClass = 'role-request';
+                        }
+
+                        // Determine CSS class for Request Status
+                        let requestStatusClass = '';
+                        switch (approval.request_status) {
+                            case 'Accepted':
+                                requestStatusClass = 'status-accepted';
+                                break;
+                            case 'Rejected':
+                                requestStatusClass = 'status-rejected';
+                                break;
+                            case 'Pending':
+                                requestStatusClass = 'status-pending';
+                                break;
+                        }
+
+                        row.innerHTML = `
+                            <td>${approval.username}</td>
+                            <td class="${requestTypeClass}">${approval.request_type}</td>
+                            <td>${approval.request_value}</td>
+                            <td class="${requestStatusClass}">${approval.request_status}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+
+            } catch (error) {
+                console.error('Error loading approvals:', error);
+                document.getElementById('view-approvals-table-body').innerHTML = '<tr><td colspan="4">Error loading approvals. Please try again later.</td></tr>';
+            }
+        }
+
+
+
+        async function loadRemoveResourceUser() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/userresources');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const userResources = await response.json();
+
+                const tableBody = document.getElementById('remove-resource-user-table-body');
+                tableBody.innerHTML = ''; // Clear previous content
+
+                if (userResources.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="3">No resources found.</td></tr>';
+                } else {
+                    userResources.forEach(userResource => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${userResource.username}</td>
+                            <td>${userResource.resourceName}</td>
+                            <td>
+                                <form class="remove-user-resource-form" style="display:inline;">
+                                    <input type="hidden" name="username" value="${userResource.username}">
+                                    <input type="hidden" name="resourceName" value="${userResource.resourceName}">
+                                    <button type="submit" class="reject-button">Remove</button>
+                                </form>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+
+                    // Add event listeners to all forms to handle form submission via JavaScript
+                    const forms = document.querySelectorAll('.remove-user-resource-form');
+                    forms.forEach(form => {
+                        form.addEventListener('submit', async function(event) {
+                            event.preventDefault(); // Prevent the form from submitting normally
+
+                            const formData = new FormData(this);
+                            const params = new URLSearchParams(formData).toString();
+
+                            try {
+                                const removeResponse = await fetch('/uam/webapi/myresource/resource/remove', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    },
+                                    body: params
+                                });
+
+                                if (!removeResponse.ok) {
+                                    throw new Error('Failed to remove resource');
+                                }
+
+                                const message = await removeResponse.text();
+                                alert(message); // Show server response
+                                loadRemoveResourceUser(); // Reload the resources after removing one
+                            } catch (error) {
+                                console.error('Error removing resource:', error);
+                                alert('An error occurred while removing the resource.');
+                            }
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading user resources:', error);
+                document.getElementById('remove-resource-user-table-body').innerHTML = '<tr><td colspan="3">Error loading resources. Please try again later.</td></tr>';
+            }
+        }
+
+
+        async function loadUsersDropdown() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/allusers');
+                const users = await response.json();
+                const userDropdown = document.getElementById('userId');
+
+                userDropdown.innerHTML = ''; // Clear any existing options
+
+                // Add the default "Select a Resource" option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select a User';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                userDropdown.appendChild(defaultOption);
+
+                // Populate the dropdown with user data
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.username; // Assuming `username` is the key you want to use as the value
+                    option.textContent = user.username; // Display username
+                    userDropdown.appendChild(option);
+                });
+
+                // Attach event listener for dropdown changes
+                userDropdown.addEventListener('change', function() {
+                    // Clear content and trigger content reload
+                    document.getElementById('all-user-content').innerHTML = '';
+                    loadUsersOfResource(); // Call the function to load resources based on selected user
+                });
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        }
+        document.querySelector('#remove-user form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            const username = document.getElementById('userId').value;
+            
+            if (!username) {
+                alert('Please select a user.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/uam/webapi/myresource/removeuser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ 'user': username })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.text();
+                document.getElementById('all-user-content').innerHTML = `<p>${result}</p>`; // Display result in the div
+                // Optionally, you could also show a popup message
+                //alert(result);
+                loadUsersDropdown();
+            } catch (error) {
+                console.error('Error removing user:', error);
+                document.getElementById('all-user-content').innerHTML = '<p>Error removing user. Please try again later.</p>';
+            }
+        });
+
+
+        
+        async function loadResources() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/resources');
+                const resources = await response.json();
+
+                const tableBody = document.getElementById('remove-resource-db-table-body');
+                tableBody.innerHTML = ''; // Clear existing content
+
+                resources.forEach(resource => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${resource.resourceName}</td>
+                        <td>
+                            <form class="delete-resource-form" style="display:inline;">
+                                <input type="hidden" name="resourceName" value="${resource.resourceName}">
+                                <button type="submit" class="reject-button">Remove</button>
+                            </form>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                document.querySelectorAll('.delete-resource-form').forEach(form => {
+                    form.addEventListener('submit', async function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formData = new FormData(this); // Get form data
+                        const params = new URLSearchParams(formData).toString(); // Convert to URL-encoded string
+
+                        try {
+                            const deleteResponse = await fetch('/uam/webapi/myresource/resource/delete', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded', // Set proper content type
+                                },
+                                body: params, // Use URL-encoded string as body
+                            });
+
+                            const message = await deleteResponse.text();
+                            alert(message); // Show server response
+                            loadResources(); // Reload resources after deletion
+                        } catch (error) {
+                            console.error('Error deleting resource:', error);
+                            alert('An error occurred while deleting the resource.');
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading resources:', error);
+            }
+        }
+
+
+        function accessContent(contentId, loadFunction = null) {
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                if (content.id === contentId) {
+                    content.classList.remove('hidden');
+                    if (loadFunction) {
+                        loadFunction();
+                    }
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/users');
+                const text = await response.text(); // Get response as text
+                console.log('Raw User Data:', text);
+
+                // Parse the user data
+                const users = parseUsers(text);
+                console.log('Parsed Users:', users);
+
+                const tableBody = document.getElementById('view-users-table-body');
+                tableBody.innerHTML = ''; // Clear existing content
+
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.firstname}</td>
+                        <td>${user.lastname}</td>
+                        <td>${user.username}</td>
+                        <td>${user.managerID}</td>
+                        <td>
+                            <form class="update-user-form" style="display:inline;">
+                                <input type="hidden" name="username" value="${user.username}">
+                                <input type="text" name="firstname" value="${user.firstname}" placeholder="First Name">
+                                <input type="text" name="lastname" value="${user.lastname}" placeholder="Last Name">
+                                <button type="submit" class="accept-button">Update</button>
+                            </form>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Attach event listeners to the forms
+                document.querySelectorAll('.update-user-form').forEach(form => {
+                    form.addEventListener('submit', async function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formData = new FormData(form);
+                        try {
+                            const response = await fetch('/uam/webapi/myresource/updateuser', {
+                                method: 'POST',
+                                body: new URLSearchParams(formData).toString(),
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                }
+                            });
+
+                            const result = await response.text(); // Get response as text
+                            alert(result); // Show result in an alert box
+
+                            // Reload the user list to reflect changes
+                            loadUsers();
+
+                        } catch (error) {
+                            console.error('Error updating user:', error);
+                            alert('An error occurred while updating the user.');
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+
+        function parseUsers(text) {
+            // Updated regex pattern to capture correctly and avoid overlapping with email, password, etc.
+            const userPattern = /User \[firstname=(.*?), lastname=(.*?), username=([^\s,]+),.*?managerID=(.*?)\]/g;
+            let match;
+            const users = [];
+
+            while ((match = userPattern.exec(text)) !== null) {
+                users.push({
+                    firstname: match[1],
+                    lastname: match[2],
+                    username: match[3],
+                    managerID: match[4] === "null" ? null : match[4] // Handle null values
+                });
+            }
+
+            return users;
+        }
+        
+        function loadAddResourceForm() {
+            const content = document.getElementById('add-resource-db-content');
+            content.innerHTML = `
+                <form id="add-resource-form" onsubmit="addResource(event)">
+                    <label for="resource-name">Resource Name:</label>
+                    <input type="text" id="resource-name" name="resourceName" required>
+                    <button type="submit" class="btn-green">Add Resource</button>
+                </form>
+                <div id="add-resource-response"></div>
+            `;
+        }
+        async function addResource(event) {
+            event.preventDefault(); // Prevent form from submitting the traditional way
+
+            const resourceName = document.getElementById('resource-name').value;
+            try {
+                const response = await fetch('/uam/webapi/myresource/addresource', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ resourceName })
+                });
+
+                const result = await response.text();
+                document.getElementById('add-resource-response').innerText = result;
+            } catch (error) {
+                console.error('Error adding resource:', error);
+                document.getElementById('add-resource-response').innerText = 'Failed to add resource.';
+            }
+        }
+        
+        
+        async function loadResourcesOfUser() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/resources');
+                const resources = await response.json();
+
+                const resourceDropdown = document.getElementById('resource');
+                resourceDropdown.innerHTML = ''; // Clear existing options
+
+             // Add the default "Select a Resource" option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select a Resource';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                resourceDropdown.appendChild(defaultOption);
+                
+                
+                resources.forEach(resource => {
+                    const option = document.createElement('option');
+                    option.value = resource.resourceName; // Assuming resourceName is the value you want to use
+                    option.textContent = resource.resourceName; // Display name for the option
+                    resourceDropdown.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading resources:', error);
+            }
+        }
+        document.querySelector('#resource-users form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            const resourceName = document.getElementById('resource').value;
+            
+            if (!resourceName) {
+                alert('Please select a resource.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/uam/webapi/myresource/checkusers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ 'resource': resourceName })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const html = await response.text();
+                document.getElementById('user-user-content').innerHTML = html;
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                document.getElementById('user-user-content').innerHTML = '<p>Error fetching users. Please try again later.</p>';
+            }
+        });
+
+        
+
+        async function loadUsersOfResource() {
+            try {
+                const response = await fetch('/uam/webapi/myresource/allusers');
+                const users = await response.json();
+
+                const userDropdown = document.getElementById('userrr');
+                userDropdown.innerHTML = ''; // Clear existing options
+
+                // Add the default "Select a Resource" option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select a User';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                userDropdown.appendChild(defaultOption);
+
+                users.forEach(user => {  // Updated to directly use the array values
+                    const option = document.createElement('option');
+                    option.value = user.username; // Set the value to the username string
+                    option.textContent = user.username; // Set the display text to the username string
+                    userDropdown.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        document.querySelector('#user-resources form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            const username = document.getElementById('userrr').value;
+            
+            if (!username) {
+                alert('Please select a user.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/uam/webapi/myresource/checkresources', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ 'userrr': username })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const html = await response.text();
+                document.getElementById('user-resources-content').innerHTML = html;
+            } catch (error) {
+                console.error('Error fetching resources:', error);
+                document.getElementById('user-resources-content').innerHTML = '<p>Error fetching resources. Please try again later.</p>';
+            }
+        });
+
+		
+        
+        function logoutfunction() {
+            // Clear session storage
+            sessionStorage.clear();
+
+            // Invalidate session on the server side
+            fetch('http://localhost:8888/uam/webapi/myresource/logout', {
+                method: 'POST',
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Clear sensitive information
+                    clearSensitiveData();
+
+                    // Redirect to login page
+                    redirectToLogin();
+                } else {
+                    alert("Logout failed. Please try again.");
+                }
+            });
+
+            // Clear sensitive data immediately
+            clearSensitiveData();
+
+            // Function to clear sensitive data
+            function clearSensitiveData() {
+                // Example: Clear any user-specific information in the navigation bar
+                document.querySelectorAll('.nav-credentials').forEach(el => el.textContent = '');
+                // Optionally clear other elements or hide them
+                document.body.innerHTML = '';  // Clear the entire page content
+            }
+
+            // Function to redirect to the login page and handle back navigation
+            function redirectToLogin() {
+                // Replace the current history entry with the login page
+                history.replaceState(null, null, 'index.jsp');
+
+                // Repeat the pushState 10 times to prevent back navigation
+                for (let i = 0; i < 100; i++) {
+                    history.pushState(null, null, 'index.jsp');
+                }
+
+                // Redirect immediately to the login page
+                window.location.replace('index.jsp');
+            }
+
+            // Prevent back navigation on the login page
+            window.addEventListener('load', function() {
+                // Repeat the pushState 10 times to prevent back navigation
+                for (let i = 0; i < 100; i++) {
+                    history.pushState(null, null, 'index.jsp');
+                }
+
+                // Add popstate event listener to handle back button navigation
+                window.addEventListener('popstate', function() {
+                    // Repeat the replace 10 times to make sure user can't go back
+                    for (let i = 0; i < 100; i++) {
+                        window.location.replace('index.jsp');
+                    }
+                });
+            });
+
+            // Function to prevent browser caching of sensitive information
+            function noCache() {
+                // Set meta tags for no-cache
+                let metaTags = [
+                    { name: 'cache-control', content: 'no-cache, no-store, must-revalidate' },
+                    { name: 'pragma', content: 'no-cache' },
+                    { name: 'expires', content: '0' }
+                ];
+
+                metaTags.forEach(metaTag => {
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('http-equiv', metaTag.name);
+                    meta.content = metaTag.content;
+                    document.head.appendChild(meta);
+                });
+
+                // Additionally, set response headers on the server side to prevent caching
+            }
+        }
+
+        
+document.getElementById('requestForm1').addEventListener('submit', function(event) {
+        	
+            alert("Request request accepted!!");
+            loadRequests();
+        });
+    </script>
+</body>
+</html>
